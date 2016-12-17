@@ -1,0 +1,25 @@
+project(darknet)
+cmake_minimum_required(VERSION 2.8.9)
+
+file(GLOB data /data/*)
+file(GLOB labels /data/labels/*)
+file(COPY ${data} DESTINATION data)
+file(COPY ${labels} DESTINATION data/labels)
+
+find_package(Threads REQUIRED)
+if(THREAD_HAVE_PTHREAD_ARG)
+	target_compile_options(PUBLIC darknet "-pthread")
+endif()
+FIND_PACKAGE(OpenMP REQUIRED)
+if(OPENMP_FOUND)
+	set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${OpenMP_C_FLAGS}")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${OpenMP_CXX_FLAGS} -std=c++11")
+    set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} ${OpenMP_EXE_LINKER_FLAGS}")
+endif()
+
+file(GLOB_RECURSE sources src/*.c src/*.h)
+add_library(darknet ${sources})
+
+if(CMAKE_THREAD_LIBS_INIT)
+	target_link_libraries(darknet "${CMAKE_THREAD_LIBS_INIT}")
+endif()

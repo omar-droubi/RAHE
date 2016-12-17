@@ -1,0 +1,12 @@
+# OS Generated #
+.DS_STORE*
+ehthumbs.db
+Icon?
+Thumbs.db
+*.swp
+
+*.cproject
+*.project
+.vscode/
+build/
+
